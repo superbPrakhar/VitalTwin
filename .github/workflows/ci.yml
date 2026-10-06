@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run test suite
+        run: python -m pytest tests/ -q
+      - name: Smoke-test the server boot
+        run: |
+          python - <<'EOF'
+          from fastapi.testclient import TestClient
+          from app.main import app
+          with TestClient(app) as c:
+              assert c.get("/api/health").json()["status"] == "ok"
+              pts = c.get("/api/patients").json()
+              assert len(pts) == 3
+              r = c.post("/api/patients/arjun/sync", json={"hours": 6}).json()
+              assert r["synced_hours"] == 6
+          print("server boot + sync OK")
+          EOF

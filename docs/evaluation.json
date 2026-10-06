@@ -1,0 +1,139 @@
+{
+  "metrics": {
+    "val_auroc": 0.784,
+    "val_average_precision": 0.493,
+    "prevalence": 0.0166,
+    "n_patients": 120,
+    "n_days": 180,
+    "threshold": 0.01,
+    "sensitivity": 0.697,
+    "specificity": 0.765,
+    "alerts_per_patient_day": 0.2422,
+    "alert_threshold": 0.01,
+    "sensitivity_target_met": true,
+    "at_sens_080": {
+      "threshold": 0.005,
+      "sensitivity": 0.833,
+      "specificity": 0.36,
+      "alerts_per_patient_day": 0.6431
+    },
+    "roc_sweep": [
+      {
+        "threshold": 0.005,
+        "sensitivity": 0.833,
+        "specificity": 0.36,
+        "alerts_per_patient_day": 0.6431
+      },
+      {
+        "threshold": 0.01,
+        "sensitivity": 0.697,
+        "specificity": 0.765,
+        "alerts_per_patient_day": 0.2422
+      },
+      {
+        "threshold": 0.02,
+        "sensitivity": 0.576,
+        "specificity": 0.952,
+        "alerts_per_patient_day": 0.0565
+      },
+      {
+        "threshold": 0.03,
+        "sensitivity": 0.545,
+        "specificity": 0.984,
+        "alerts_per_patient_day": 0.0246
+      },
+      {
+        "threshold": 0.05,
+        "sensitivity": 0.53,
+        "specificity": 0.994,
+        "alerts_per_patient_day": 0.0146
+      },
+      {
+        "threshold": 0.08,
+        "sensitivity": 0.5,
+        "specificity": 0.996,
+        "alerts_per_patient_day": 0.0126
+      },
+      {
+        "threshold": 0.12,
+        "sensitivity": 0.455,
+        "specificity": 0.996,
+        "alerts_per_patient_day": 0.0118
+      },
+      {
+        "threshold": 0.18,
+        "sensitivity": 0.409,
+        "specificity": 0.997,
+        "alerts_per_patient_day": 0.0098
+      },
+      {
+        "threshold": 0.25,
+        "sensitivity": 0.394,
+        "specificity": 0.997,
+        "alerts_per_patient_day": 0.009
+      },
+      {
+        "threshold": 0.35,
+        "sensitivity": 0.379,
+        "specificity": 0.998,
+        "alerts_per_patient_day": 0.0083
+      }
+    ],
+    "mean_lead_hours_when_detected": 18.5,
+    "detected_events": 46
+  },
+  "cohort": {
+    "n_patients": 120,
+    "n_days": 180,
+    "seed": 2026,
+    "total_events": 732
+  },
+  "feature_names": [
+    "rest_hr_z",
+    "hr_evening_z",
+    "hrv_night_z",
+    "hrv_evening_z",
+    "hr_up_hrv_down",
+    "hrv_ratio_3_7",
+    "sleep_hours_7d",
+    "sleep_debt_7d",
+    "sleep_frag_3d",
+    "spo2_dip_3d",
+    "steps_ratio",
+    "glucose_mean_z",
+    "glucose_cv_3d",
+    "tir_7d",
+    "glucose_night_min_3d",
+    "hypo_7d",
+    "temp_dev_max_z",
+    "temp_dev_3d_z",
+    "rr_max_z",
+    "age",
+    "bmi",
+    "comorbidity_count"
+  ],
+  "weights": {
+    "rest_hr_z": 0.0765,
+    "hr_evening_z": 0.1508,
+    "hrv_night_z": -0.0755,
+    "hrv_evening_z": -0.2256,
+    "hr_up_hrv_down": -0.0442,
+    "hrv_ratio_3_7": 0.2647,
+    "sleep_hours_7d": 0.0905,
+    "sleep_debt_7d": -0.0952,
+    "sleep_frag_3d": 0.0168,
+    "spo2_dip_3d": 0.145,
+    "steps_ratio": -0.1912,
+    "glucose_mean_z": -0.0074,
+    "glucose_cv_3d": 0.0224,
+    "tir_7d": -0.0266,
+    "glucose_night_min_3d": 0.0246,
+    "hypo_7d": -0.0193,
+    "temp_dev_max_z": 0.2548,
+    "temp_dev_3d_z": 0.0283,
+    "rr_max_z": 0.6981,
+    "age": 0.0208,
+    "bmi": -0.0525,
+    "comorbidity_count": 0.1145
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "feature_names": [
+    "rest_hr_z",
+    "hr_evening_z",
+    "hrv_night_z",
+    "hrv_evening_z",
+    "hr_up_hrv_down",
+    "hrv_ratio_3_7",
+    "sleep_hours_7d",
+    "sleep_debt_7d",
+    "sleep_frag_3d",
+    "spo2_dip_3d",
+    "steps_ratio",
+    "glucose_mean_z",
+    "glucose_cv_3d",
+    "tir_7d",
+    "glucose_night_min_3d",
+    "hypo_7d",
+    "temp_dev_max_z",
+    "temp_dev_3d_z",
+    "rr_max_z",
+    "age",
+    "bmi",
+    "comorbidity_count"
+  ],
+  "weights": [
+    0.07646274293572501,
+    0.1507686392109423,
+    -0.07552082098879485,
+    -0.22561757559814408,
+    -0.044220507241328165,
+    0.2646709071235004,
+    0.09053307972266314,
+    -0.09522837965850056,
+    0.01684059290555755,
+    0.14502795340033908,
+    -0.19120353767862633,
+    -0.007422262807392589,
+    0.02237827461379189,
+    -0.026599343915079246,
+    0.02455741447456526,
+    -0.01932947363296349,
+    0.2547847899959198,
+    0.02829055202526117,
+    0.6981017467606719,
+    0.0208287372264312,
+    -0.05248949280541743,
+    0.11452444460930256
+  ],
+  "intercept": -5.016422137066835,
+  "means": [
+    0.0750971753569475,
+    0.08443106760844939,
+    0.0777888568956999,
+    0.05239488911005391,
+    0.13682595671850328,
+    1.0024286013812558,
+    6.605654761904762,
+    6.682291666666667,
+    0.4690808546686747,
+    0.11124184236947791,
+    1.0018094561795063,
+    -0.0460336843722993,
+    15.350107445406627,
+    85.2790949512335,
+    102.56761420682732,
+    3.4528112449799195,
+    0.09526891702885457,
+    0.027790810836471957,
+    0.15277990026810348,
+    56.083333333333336,
+    27.776041666666668,
+    1.4791666666666667
+  ],
+  "sds": [
+    1.4101354272357647,
+    1.2619735331521205,
+    1.3646017184005381,
+    1.2307862732821238,
+    1.9769330610960205,
+    0.08360741299675706,
+    0.6756869062391762,
+    3.9490951544575825,
+    0.08827205645245692,
+    0.46870921591442966,
+    0.09621222966398832,
+    1.5216121553717101,
+    7.348984389624744,
+    22.900784782821187,
+    30.7709686320546,
+    13.226373786601796,
+    1.516103217207201,
+    0.6215537137194753,
+    1.7123015268137207,
+    13.388588571731606,
+    4.753475716835516,
+    0.7770267216097505
+  ],
+  "meta": {
+    "l2": 0.001,
+    "epochs": 3000,
+    "n": 15936,
+    "positives": 184,
+    "val_auroc": 0.784,
+    "val_average_precision": 0.493,
+    "prevalence": 0.0166,
+    "n_patients": 120,
+    "n_days": 180,
+    "threshold": 0.01,
+    "sensitivity": 0.697,
+    "specificity": 0.765,
+    "alerts_per_patient_day": 0.2422,
+    "alert_threshold": 0.01,
+    "sensitivity_target_met": true,
+    "at_sens_080": {
+      "threshold": 0.005,
+      "sensitivity": 0.833,
+      "specificity": 0.36,
+      "alerts_per_patient_day": 0.6431
+    },
+    "roc_sweep": [
+      {
+        "threshold": 0.005,
+        "sensitivity": 0.833,
+        "specificity": 0.36,
+        "alerts_per_patient_day": 0.6431
+      },
+      {
+        "threshold": 0.01,
+        "sensitivity": 0.697,
+        "specificity": 0.765,
+        "alerts_per_patient_day": 0.2422
+      },
+      {
+        "threshold": 0.02,
+        "sensitivity": 0.576,
+        "specificity": 0.952,
+        "alerts_per_patient_day": 0.0565
+      },
+      {
+        "threshold": 0.03,
+        "sensitivity": 0.545,
+        "specificity": 0.984,
+        "alerts_per_patient_day": 0.0246
+      },
+      {
+        "threshold": 0.05,
+        "sensitivity": 0.53,
+        "specificity": 0.994,
+        "alerts_per_patient_day": 0.0146
+      },
+      {
+        "threshold": 0.08,
+        "sensitivity": 0.5,
+        "specificity": 0.996,
+        "alerts_per_patient_day": 0.0126
+      },
+      {
+        "threshold": 0.12,
+        "sensitivity": 0.455,
+        "specificity": 0.996,
+        "alerts_per_patient_day": 0.0118
+      },
+      {
+        "threshold": 0.18,
+        "sensitivity": 0.409,
+        "specificity": 0.997,
+        "alerts_per_patient_day": 0.0098
+      },
+      {
+        "threshold": 0.25,
+        "sensitivity": 0.394,
+        "specificity": 0.997,
+        "alerts_per_patient_day": 0.009
+      },
+      {
+        "threshold": 0.35,
+        "sensitivity": 0.379,
+        "specificity": 0.998,
+        "alerts_per_patient_day": 0.0083
+      }
+    ],
+    "mean_lead_hours_when_detected": 18.5,
+    "detected_events": 46
+  }
+}

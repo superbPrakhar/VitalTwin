@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalTwin — Patient Digital Twin (PoC)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫀</text></svg>" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">VT</span>
+      <div>
+        <h1>VitalTwin</h1>
+        <p class="tagline">A living digital replica of the patient — EHR history fused with wearable telemetry</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="badge badge-warn">Synthetic PoC · not a medical device</span>
+      <span class="badge" id="modelBadge">model: loading…</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h2 class="side-title">Patients</h2>
+      <div id="patientList" class="patient-list"></div>
+      <p class="side-note">All patients, EHRs and telemetry in this PoC are <b>synthetic</b> and generated deterministically at server boot.</p>
+    </aside>
+
+    <main class="main">
+      <section id="patientHeader" class="patient-header hidden">
+        <div class="ph-left">
+          <div class="avatar" id="phAvatar">?</div>
+          <div>
+            <h2 id="phName">—</h2>
+            <p class="muted" id="phMeta">—</p>
+            <div class="chips" id="phConditions"></div>
+          </div>
+        </div>
+        <div class="ph-right">
+          <div class="risk-pill" id="phRisk">—</div>
+          <button class="btn btn-primary" id="syncBtn">⏵ Sync 6 h of telemetry</button>
+          <span class="muted small" id="syncStatus"></span>
+        </div>
+      </section>
+
+      <nav class="tabs hidden" id="tabs">
+        <button class="tab active" data-tab="mirror">Twin mirror</button>
+        <button class="tab" data-tab="risk">Risk &amp; alerts</button>
+        <button class="tab" data-tab="trends">Trends</button>
+        <button class="tab" data-tab="protocol">Protocol studio</button>
+        <button class="tab" data-tab="report">Clinician report</button>
+      </nav>
+
+      <section id="welcome" class="card welcome">
+        <h2>Select a patient to open their digital twin</h2>
+        <p>The twin mirrors each patient's physiology hour by hour — assimilating wearable/CGM telemetry
+           onto their EHR-calibrated physiological model — to <b>predict adverse events before they occur</b>
+           and <b>simulate treatment protocols before they are prescribed</b>.</p>
+        <ol class="demo-script">
+          <li><b>Arjun Rao</b> (72, post-cardiac-event): press <i>Sync</i> a few times — watch TwinRisk climb
+              during the prodrome, before any vital breaches a NEWS2 threshold.</li>
+          <li><b>Ravi Sharma</b> (58, T2D + hypertension): open <i>Protocol Studio</i> and goal-seek the smallest
+              metformin dose reaching HbA1c 6.8% in 90 days.</li>
+          <li><b>Meera Iyer</b> (45, prediabetes): simulate a walking + diet protocol and see the projected
+              HbA1c trajectory reversal.</li>
+        </ol>
+      </section>
+
+      <!-- MIRROR -->
+      <section id="tab-mirror" class="tab-panel hidden">
+        <div class="grid-3">
+          <div class="card">
+            <h3>Assimilated vitals <span class="muted small" id="mirrorTime"></span></h3>
+            <div class="vitals-grid" id="vitalsGrid"></div>
+            <p class="muted small">Blood pressure is model-carried by the twin between home-cuff readings (mixed-sampling assimilation).</p>
+          </div>
+          <div class="card organ-card">
+            <h3>Organ-system status</h3>
+            <div id="organList"></div>
+          </div>
+          <div class="card">
+            <h3>Live monitoring alarms</h3>
+            <div id="alarmList" class="alarms">—</div>
+            <h3 style="margin-top:16px">Data fusion</h3>
+            <div class="muted small" id="fusionInfo">—</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><h3>CGM glucose — last 48 h</h3><div class="chart-box"><canvas id="glucoseChart"></canvas></div></div>
+          <div class="card"><h3>Heart rate &amp; HRV — last 48 h</h3><div class="chart-box"><canvas id="hrChart"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- RISK -->
+      <section id="tab-risk" class="tab-panel hidden">
+        <div class="grid-3">
+          <div class="card center">
+            <h3>TwinRisk — 48 h deterioration probability</h3>
+            <div class="gauge" id="riskGauge"><span id="riskValue">—</span><small id="riskBand"></small></div>
+            <p class="muted small" id="riskThresholdNote"></p>
+          </div>
+          <div class="card">
+            <h3>NEWS2 on assimilated vitals</h3>
+            <div class="news2-score" id="news2Score">—</div>
+            <div id="news2Parts"></div>
+            <p class="muted small">Transparent clinical baseline (RCP 2017) scored on the twin's current state.</p>
+          </div>
+          <div class="card">
+            <h3>Why the model is worried (drivers)</h3>
+            <div class="chart-box"><canvas id="driversChart"></canvas></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><h3>Risk trajectory — 30 days (alert threshold dashed)</h3><div class="chart-box"><canvas id="riskHistoryChart"></canvas></div></div>
+          <div class="card"><h3>Alert feed</h3><div id="alertFeed" class="alerts"></div></div>
+        </div>
+      </section>
+
+      <!-- TRENDS -->
+      <section id="tab-trends" class="tab-panel hidden">
+        <div class="grid-2">
+          <div class="card"><h3>Resting HR (night) &amp; night HRV</h3><div class="chart-box"><canvas id="trendHrChart"></canvas></div></div>
+          <div class="card"><h3>Sleep hours &amp; fragmentation</h3><div class="chart-box"><canvas id="trendSleepChart"></canvas></div></div>
+          <div class="card"><h3>Steps / day</h3><div class="chart-box"><canvas id="trendStepsChart"></canvas></div></div>
+          <div class="card"><h3>Glycaemic control (TIR &amp; mean glucose)</h3><div class="chart-box"><canvas id="trendGlucoseChart"></canvas></div></div>
+        </div>
+      </section>
+
+      <!-- PROTOCOL STUDIO -->
+      <section id="tab-protocol" class="tab-panel hidden">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Design a protocol</h3>
+            <p class="muted small">Adjust levers and simulate on the twin before prescribing. Levers at the patient's current values have no effect.</p>
+            <div id="levers"></div>
+            <div class="row">
+              <label class="inline">Horizon
+                <select id="horizon">
+                  <option value="30">30 days</option>
+                  <option value="90" selected>90 days</option>
+                  <option value="180">180 days</option>
+                </select>
+              </label>
+              <button class="btn btn-primary" id="runSimBtn">▶ Simulate on twin</button>
+              <button class="btn" id="resetSimBtn">Reset levers</button>
+            </div>
+            <div id="simSummary" class="sim-summary"></div>
+          </div>
+          <div class="card">
+            <h3>Goal seek — the twin as prescription</h3>
+            <p class="muted small">Binary-searches a lever to the smallest change reaching a clinical target, with a ±10% physiological uncertainty band.</p>
+            <div class="row wrap">
+              <label class="inline">Lever
+                <select id="goalLever">
+                  <option value="metformin_mg">Metformin dose (mg/day)</option>
+                  <option value="steps_day">Steps / day</option>
+                  <option value="kcal_delta_day">Dietary deficit (kcal/day)</option>
+                </select>
+              </label>
+              <label class="inline">Target HbA1c <input type="number" id="goalTarget" value="7.0" step="0.1" min="4.5" max="9"> %</label>
+              <label class="inline">Within <input type="number" id="goalDays" value="90" step="30" min="30" max="365"> days</label>
+            </div>
+            <button class="btn btn-primary" id="goalBtn">🎯 Find smallest change</button>
+            <div id="goalResult" class="sim-summary"></div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><h3>Projected trajectory (baseline dashed vs protocol solid)</h3><div class="chart-box"><canvas id="simChart"></canvas></div></div>
+          <div class="card"><h3>Lever contributions (one-at-a-time ablation)</h3><div id="explainTable"></div></div>
+        </div>
+      </section>
+
+      <!-- REPORT -->
+      <section id="tab-report" class="tab-panel hidden">
+        <div class="card">
+          <h3>Clinician-facing summary <button class="btn btn-small" id="copyReport" style="float:right">Copy markdown</button></h3>
+          <pre id="reportPre" class="report">Loading…</pre>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    VitalTwin — Happiest Health Digital Twin Challenge 2026 PoC · All data synthetic ·
+    Not a medical device · <span id="apiBase"></span>
+  </footer>
+
+  <script src="vendor/chart.umd.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
