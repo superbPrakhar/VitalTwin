@@ -1,4 +1,4 @@
-team name :Roxx;
+team name :Roxx
 
 college: Vellore Institute of technology
 
